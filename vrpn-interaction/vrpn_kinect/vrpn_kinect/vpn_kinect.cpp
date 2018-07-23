@@ -43,7 +43,7 @@ void VRPN_CALLBACK handle_tracker( void* userData, const vrpn_TRACKERCB b )
 			cout << "Right Arm Down" << endl;
 			right_down = true;
 		}
-	}
+	} 
 	if(lh_y > ls_y){
 		if(left_down){
 			cout << "Left Arm Raised" << endl;
