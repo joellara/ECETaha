@@ -6,7 +6,7 @@
 using namespace std;
 // rh = right hand, lf = left hand, rs = right shoulder, ls = left shoulder
 // defining global constants
-const int RH_SENSOR = 11, RS_SENSOR = 8, LH_SENSOR = 7, S_SENSOR = 4;
+const int RH_SENSOR = 11, RS_SENSOR = 8, LH_SENSOR = 7, LS_SENSOR = 4;
 const float MIN_DISTANCE_X = 0.01,MIN_DISTANCE_Y = 0.1, MIN_DISTANCE_NO_CLAP = 0.2;
 
 //defining the variables to track the movement of the body
@@ -27,10 +27,10 @@ void VRPN_CALLBACK handle_tracker( void* userData, const vrpn_TRACKERCB b )
 	}else if(b.sensor == RS_SENSOR){ //Right shoulder sensor
 		rs_y = b.pos[1];
 	}
-	if(b.sensor == RH_SENSOR){
+	if(b.sensor == LH_SENSOR){
 		lh_y = b.pos[1];
 		lh_x = b.pos[0];
-	}else if(b.sensor == RS_SENSOR){
+	}else if(b.sensor == LS_SENSOR){
 		ls_y = b.pos[1];
 	}
 	if(rh_y > rs_y){
