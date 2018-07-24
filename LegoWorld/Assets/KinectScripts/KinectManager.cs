@@ -502,22 +502,7 @@ public class KinectManager : MonoBehaviour
 				gestureData.checkForGestures.Add(KinectGestures.Gestures.ZoomIn);
 				gestureData.checkForGestures.Add(KinectGestures.Gestures.ZoomOut);			
 				break;
-			
-//			case KinectGestures.Gestures.Jump:
-//				gestureData.checkForGestures.Add(KinectGestures.Gestures.Squat);
-//				break;
-//				
-//			case KinectGestures.Gestures.Squat:
-//				gestureData.checkForGestures.Add(KinectGestures.Gestures.Jump);
-//				break;
-//				
-//			case KinectGestures.Gestures.Push:
-//				gestureData.checkForGestures.Add(KinectGestures.Gestures.Pull);
-//				break;
-//				
-//			case KinectGestures.Gestures.Pull:
-//				gestureData.checkForGestures.Add(KinectGestures.Gestures.Push);
-//				break;
+		
 		}
 		
 		if(UserId == Player1ID)
@@ -1147,36 +1132,54 @@ public class KinectManager : MonoBehaviour
 						controller.UpdateAvatar(Player1ID);
 					}
 				}
-					
+				//--------------------------------------------------------------------------------------------------//
+				//                                                                                                  //
+				//                                                                                                  //
+				//                                                                                                  //
+				//                                                                                                  //
+				//----------------------------------- Start of our coding part --------------------------------------//
+				//                                                                                                  //
+				//                                                                                                  //
+				//                                                                                                  //
+				//                                                                                                  //
+				//                                                                                                  //
+				//--------------------------------------------------------------------------------------------------//
+
 				// Check for complete gestures
 				foreach(KinectGestures.GestureData gestureData in player1Gestures)
 				{
+					//Check only the completed gestures
 					if(gestureData.complete)
 					{
+						//Check if the gesture is a click(Holding for 2.5sec on the same place)
 						if(gestureData.gesture == KinectGestures.Gestures.Click)
 						{
-                            Debug.Log("Click");
+							//Check if you have selected a brick and you still haven't found the correct Answer
                             if (selected >= 0 && !correctAnswer)
                             {
-                                Debug.Log("Block number selected: " + selected);
-                                
+								//Hard coded solution of the bricks, if you have already selected a brick
+								//and you click, then check for the answer
+								//Change the color for the hover interaction
+								//0 is the BlueBrick
                                 if(selected == 0)
                                 {
                                     bluebrick.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.red);
                                     brick0Selected = true;                      
                                 }
+								//1 is the Pinkbrick
                                 if(selected == 1)
                                 {
                                     pinkbrick.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.red);
                                     brick1Selected = true;
                                 }
+								//2 is the Yellowbrick
                                 if(selected == 2)
                                 {
                                     yellowbrick.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.green);
                                     brick2Selected = true;
                                     correctAnswer = true;
                                 }
-
+								//Change the text depending on the result of the interaction of clicking
                                 if((brick0Selected == true || brick1Selected == true || brick2Selected == true) && correctAnswer == true)
                                 {
                                     success.SetActive(true);
@@ -1216,24 +1219,29 @@ public class KinectManager : MonoBehaviour
 							gestureData.gesture == KinectGestures.Gestures.LeftHandCursor) && 
 							gestureData.progress >= 0.5f)
 						{
-                            //  Debug.Log(gestureData.screenPos);
 							if(GetGestureProgress(gestureData.userId, KinectGestures.Gestures.Click) < 0.3f)
 							{
-
+								//Check if we have a gameobject to use as cursor, and we haven't found the correct answer
 								if(HandCursor1 != null && !correctAnswer)
 								{
 									Vector3 vCursorPos = gestureData.screenPos;
+									//This is to stay in the same position as all the objects
 
                                     Vector3 offset = new Vector3(-2360, 208, -600);
+
+									//Our world is big and inversed
                                     vCursorPos *= 1000;
                                     vCursorPos.x *= -1;
                                     vCursorPos += offset;
+
 									HandCursor1.transform.position = Vector3.Lerp(HandCursor1.transform.position, vCursorPos, 3000 * Time.deltaTime);
+
+									//Calculate the position of the object in reference with the screen
                                     Vector3 hc_viewport = Camera.main.WorldToScreenPoint(HandCursor1.transform.position);
                                     Vector3 pinkbrick_viewport = Camera.main.WorldToScreenPoint(pinkbrick.transform.GetChild(1).transform.position);
                                     Vector3 yellowbrick_viewport = Camera.main.WorldToScreenPoint(yellowbrick.transform.GetChild(1).transform.position);
                                     Vector3 bluebrick_viewport = Camera.main.WorldToScreenPoint(bluebrick.transform.GetChild(1).transform.position);
-
+									//The statements are used to change the color of thee objects, depending on the hover interaction
                                     if (Math.Abs(hc_viewport.x - pinkbrick_viewport.x) < 100 && brick1Selected == false)
                                     {
                                         pinkbrick.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.grey);
@@ -1254,6 +1262,7 @@ public class KinectManager : MonoBehaviour
                                     {
                                         selected = -1;
                                     }
+									//Change back to the normal color if you haven't select given brick and it's not the hovering brick
                                     if(selected != 0 && brick0Selected == false)
                                     {
                                         bluebrick.transform.GetChild(0).GetComponent<Renderer>().material.SetColor("_Color", Color.magenta);
@@ -1286,6 +1295,18 @@ public class KinectManager : MonoBehaviour
 						}
 					}
 				}
+				//--------------------------------------------------------------------------------------------------//
+				//                                                                                                  //
+				//                                                                                                  //
+				//                                                                                                  //
+				//                                                                                                  //
+				//----------------------------------- End of our coding part --------------------------------------//
+				//                                                                                                  //
+				//                                                                                                  //
+				//                                                                                                  //
+				//                                                                                                  //
+				//                                                                                                  //
+				//--------------------------------------------------------------------------------------------------//
 			}
 			
 			// Update player 2's models if he/she is calibrated and the model is active.
